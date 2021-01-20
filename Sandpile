@@ -1,0 +1,76 @@
+import numpy as np
+import random
+import matplotlib.pyplot as plt
+
+width = 50
+height = 50
+grid = np.zeros((height, width))
+
+#initial grid values using pseudorandom generator
+for i in range(height):
+    for j in range(width):
+        grid[i,j] = random.randint(0,3)
+
+#Dropping a grain of sand
+#in a set place each time
+a=25
+b=25
+grid[a,b] = grid[a,b] + 1
+
+#randomly
+#a = random.randint(0, height)
+#b = random.randint(0, width)
+#grid[a,b] = grid[a,b] + 1
+
+#Collapse
+collapse = []
+if grid[a,b] > 3:
+    if a+1 in range(0,height):
+        grid[a+1,b] = grid[a+1,b] +1
+        if grid[a+1,b] > 3:
+            collapse.append([a+1,b])
+   
+    if a-1 in range(0,height):
+        grid[a-1,b] = grid[a-1,b] +1
+        if grid[a-1,b] > 3:
+            collapse.append([a-1,b])
+    
+    if b+1 in range(0,width):
+        grid[a,b+1] = grid[a,b+1] +1
+        if grid[a,b+1] > 3:
+            collapse.append([a,b+1])
+    
+    if b-1 in range(0,width):
+        grid[a,b-1] = grid[a,b-1] +1
+        if grid[a,b-1] > 3:
+            collapse.append([a,b-1])
+
+n = 0
+for i in collapse:
+    if i[0]+1 in range(0,height):
+        grid[i[0]+1,b] = grid[i[0]+1,b] +1
+        if grid[i[0]+1,b] > 3:
+            collapse.append([i[0]+1,b])
+   
+    if i[0]-1 in range(0,height):
+        grid[i[0]-1,b] = grid[i[0]-1,b] +1
+        if grid[i[0]-1,b] > 3:
+            collapse.append([i[0]-1,b])
+    
+    if i[1]+1 in range(0,width):
+        grid[a,i[1]+1] = grid[a,i[1]+1] +1
+        if grid[a,i[1]+1] > 3:
+            collapse.append([a,i[1]+1])
+    
+    if i[1]-1 in range(0,width):
+        grid[a,i[1]-1] = grid[a,i[1]-1] +1
+        if grid[a,i[1]-1] > 3:
+            collapse.append([a,i[1]-1])
+
+    collapse.pop(0)
+    n = n+1
+
+plt.imshow(grid)
+plt.show()
+
+
