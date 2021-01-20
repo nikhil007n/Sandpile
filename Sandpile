@@ -91,7 +91,7 @@ while step <1000000:
  print(step)
  
  
- plt.imshow(grid)
- plt.show()
+plt.imshow(grid)
+plt.show()
 
 
