@@ -1,0 +1,41 @@
+import numpy as np
+
+def densitypooling(grid, width, height, kwidth, kheight):
+    delta_height = kheight - (height % kheight)
+    delta_width = kwidth - (width % kwidth)
+    
+    if height % kheight != 0:
+        newheight = height + delta_height
+        for i in range(delta_height):
+            grid.append(np.zeros(width+delta_width).tolist())
+    else:
+        newheight = height
+            
+    if width % kwidth != 0:
+        newwidth = width + delta_width
+        for j in range(delta_width):
+            for k in range(height):
+                grid[k].append(0)
+                
+    else:
+        newwidth = width
+    
+   
+    densitygrid = np.zeros((newheight//kheight, newwidth//kwidth))
+    
+    #pooling
+    for i in range(0, newheight, kheight):
+        for j in range(0, newwidth, kwidth):
+            predens = 0
+            for k in range(0, kheight):
+                for l in range(0, kwidth):
+                    
+                    predens = predens + grid[i+k][j+l]
+            densitygrid[i//kheight, j//kwidth] = predens
+            
+    return densitygrid
+
+#test
+grid = [[1,2,3,4],[4,5,6,7],[7,8,9,10],[10,11,12,13]]
+grid2 = np.asarray(grid)
+print(densitypooling(grid, 4, 4, 4, 4))
