@@ -33,7 +33,30 @@ def densitypooling(grid, width, height, kwidth, kheight):
                     predens = predens + grid[i+k][j+l]
             densitygrid[i//kheight, j//kwidth] = predens
             
+    #Dividing each value in density grid to get the density values
+    if len(densitygrid)==1 and len(densitygrid[0])==1:
+        densitygrid[0][0] = float(densitygrid[0][0])/(kheight*kwidth)
+        
+    elif len(densitygrid)==1 and len(densitygrid[0])!=1:
+        for j in range(((newwidth//kwidth)-1)):
+            densitygrid[0][j] = float(densitygrid[0][j])/(kheight*kwdith)
+        densitygrid[0][(newwidth//kwidth)-1] = float(densitygrid[0][(newwidth//kwidth)-1])/((kheight*kwidth)-(delta_width*kheight))
+    
+    elif len(densitygrid)!=1 and len(densitygrid[0])==1:
+        for j in range(((newheight//kheight)-1)):
+            densitygrid[j][0] = float(densitygrid[j][0])/(kheight*kwidth)
+        densitygrid[(newheight//kheight)-1][0] = float(densitygrid[(newheight//kheight)-1][0])/((kheight*kwidth)-(delta_height*kwidth))
+            
+    else:
+        for i in range((newheight//kheight)-1):
+            for j in range((newwidth//kwidth-1)):
+                densitygrid[i][j] = float(densitygrid[i][j])/(kheight*kwidth)
+                densitygrid[(newheight//kheight)-1][j] = float(densitygrid[(newheight//kheight)-1][j])/((kheight*kwidth)-(delta_height*kwidth))
+                densitygrid[i][(newwidth//kwidth)-1] = float(densitygrid[i][(newwidth//kwidth)-1])/((kheight*kwidth)-(delta_width*kheight))
+                densitygrid[(newheight//kheight)-1][(newwidth//kwidth)-1] = float(densitygrid[(newheight//kheight)-1][(newwidth//kwidth)-1])/((kwidth*kheight)-(delta_height*kwidth)-(delta_width*kheight)+(delta_height*delta_width))
+            
     return densitygrid
+
 
 #test
 grid = [[1,2,3,4],[4,5,6,7],[7,8,9,10],[10,11,12,13]]
