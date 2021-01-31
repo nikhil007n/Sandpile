@@ -1,0 +1,76 @@
+import numpy
+import matplotlib.pyplot as plt
+import math
+import random
+
+def InstantiateGrid(dim):
+    grid = numpy.zeros((dim,dim))
+    return grid
+
+def SandDropper(x, y, grid):
+    grid[x][y] += 1
+    
+def randomisedinitialgrid(grid):
+    for i in range(grid.shape[0]):
+            for j in range(grid.shape[1]):
+                grid[i,j] = random.randint(0,3)
+    return grid
+
+def RandomSanddrop(grid, dim):
+    a = random.randint(0, dim[0]-1)
+    b = random.randint(0, dim[1]-1)
+    grid[a,b] = grid[a,b] + 1
+
+def iterate(grid, dim, avalanchelist, criticalcounter):
+    avalanche = 0
+    avalanchenumber = 0
+
+    while numpy.max(grid) >= 4:
+
+        avalanche = grid >= 4
+        grid[avalanche] = 0
+        criticalcounter[avalanche] += 1
+        
+        avalanchenumber += numpy.sum(avalanche)
+        
+        grid[1:,:][avalanche[:-1,:]] += 1
+        grid[:-1,:][avalanche[1:,:]] += 1
+        grid[:,1:][avalanche[:,:-1]] += 1
+        grid[:,:-1][avalanche[:,1:]] += 1
+
+        #grid[0:1,:] = 0
+        #grid[1+dim[0]:,:] = 0
+        #grid[:,0:1] = 0
+        #grid[:,1+dim[1]:] = 0
+        
+    avalanchelist.append(avalanchenumber)
+
+    return grid, avalanchelist, criticalcounter
+
+def main():
+    N = 100000
+    dim = (51,51)
+    n = 0
+
+    grid = InstantiateGrid(dim[0])
+    #grid = randomisedinitialgrid(pregrid)
+    criticalcounter = InstantiateGrid(dim[0]) 
+    
+    avalanchelist=[]
+    while n < N:
+        SandDropper(math.floor(dim[0]/2), math.floor(dim[1]/2), grid)
+        #RandomSanddrop(grid, dim)
+        workingGrid = iterate(grid, dim, avalanchelist, criticalcounter)[0]
+        plt.subplot(1, 4, 2)
+        plt.imshow(grid)
+
+        plt.savefig("C:\\Users\\user\\Desktop\\nikhil sisodia\\Physics\\Year 3\\Research project\\sandpile steps\\" + str(n) + ".png", format="png", bbox_inches='tight', dpi=1000)
+        n += 1
+        
+    #print(iterate(grid, dim, avalanchelist, criticalcounter)[1])
+        
+  
+
+
+if __name__ == "__main__":
+    main()
